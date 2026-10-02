@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+pydantic
+yt-dlp
+redis
+python-multipart
+gallery-dl==1.32.13
+playwright>=1.55,<2
+httpx>=0.28,<1

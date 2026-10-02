@@ -1,0 +1,79 @@
+
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>آموزش دانلود از اینستاگرام</title>
+<meta name="description" content="راهنمای ساده دانلود محتوای عمومی اینستاگرام با لینک.">
+<style>
+body{margin:0;background:#fafafa;color:#191919;font-family:Tahoma,Arial,sans-serif}
+main{max-width:760px;margin:50px auto;padding:20px;background:#fff;border:1px solid #eee;border-radius:18px}
+h1{font-size:28px}h2{font-size:19px;margin-top:30px}p,li{line-height:2;color:#555}
+a{color:#111}
+</style></head>
+<body><main>
+<a href="/">← صفحه دانلود</a>
+<h1>آموزش دانلود از اینستاگرام</h1>
+<p>برای دانلود یک محتوای عمومی، لینک پست یا Reel را از اینستاگرام کپی کنید و در کادر صفحه اصلی قرار دهید.</p>
+<h2>لینک را از کجا کپی کنیم؟</h2>
+<p>در اینستاگرام گزینه اشتراک‌گذاری یا Copy link را بزنید و لینک را در سایت وارد کنید.</p>
+<h2>بعد از وارد کردن لینک چه می‌شود؟</h2>
+<p>سایت نوع محتوا و فایل‌های قابل دریافت را بررسی می‌کند. برای نتیجه اصلی یک دکمه دانلود نمایش داده می‌شود.</p>
+<h2>چرا بعضی لینک‌ها کار نمی‌کنند؟</h2>
+<p>محتوای حذف‌شده، خصوصی، محدودشده یا لینکی که دیگر از سمت اینستاگرام قابل دسترسی عمومی نیست، ممکن است قابل دریافت نباشد.</p>
+</main>
+<script id="IG_GALLERY_V2">
+/* IG_GALLERY_V2: public post gallery UI */
+(() => {
+  const input = document.querySelector('input[type="url"], input[name="url"], textarea[name="url"]');
+  const buttons = Array.from(document.querySelectorAll('button'));
+  const downloadBtn = buttons.find(b => /download|دانلود/i.test(b.textContent || ""));
+  if (!input || !downloadBtn) return;
+
+  const gallery = document.createElement('div');
+  gallery.id = 'ig-gallery-results';
+  gallery.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;margin-top:24px;';
+  downloadBtn.parentElement?.appendChild(gallery);
+
+  const old = downloadBtn.onclick;
+  downloadBtn.onclick = async (ev) => {
+    ev.preventDefault();
+    const url = input.value.trim();
+    if (!url) return;
+    gallery.innerHTML = '<div style="grid-column:1/-1">در حال آماده‌سازی تصاویر...</div>';
+    try {
+      const res = await fetch('/api/gallery', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({url})
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || 'خطا در دریافت پست');
+      gallery.innerHTML = '';
+      for (const item of data.items || []) {
+        const card = document.createElement('div');
+        card.style.cssText = 'border:1px solid #ddd;border-radius:12px;padding:10px;background:#fff;';
+        if (item.type === 'video') {
+          const v = document.createElement('video');
+          v.src = item.url; v.controls = true;
+          v.style.cssText = 'width:100%;border-radius:8px;display:block;';
+          card.appendChild(v);
+        } else {
+          const img = document.createElement('img');
+          img.src = item.url; img.loading = 'lazy';
+          img.style.cssText = 'width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:8px;display:block;';
+          card.appendChild(img);
+        }
+        const a = document.createElement('a');
+        a.href = item.url; a.download = item.filename;
+        a.textContent = 'دانلود';
+        a.style.cssText = 'display:block;text-align:center;margin-top:8px;padding:8px;border-radius:8px;background:#111;color:#fff;text-decoration:none;';
+        card.appendChild(a);
+        gallery.appendChild(card);
+      }
+    } catch (e) {
+      gallery.innerHTML = '<div style="grid-column:1/-1;color:#b00">' + (e.message || e) + '</div>';
+    }
+  };
+})();
+</script>
+</body></html>

@@ -1,0 +1,195 @@
+# ==========================================
+# Python
+# ==========================================
+
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+.Python
+build/
+develop-eggs/
+dist/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+
+# ==========================================
+# Virtual Environment
+# ==========================================
+
+.venv/
+venv/
+env/
+ENV/
+.python-version
+
+
+# ==========================================
+# Environment & Secrets
+# ==========================================
+
+.env
+.env.*
+!.env.example
+
+*.pem
+*.key
+*.crt
+
+secrets/
+credentials/
+config.local.*
+
+
+# ==========================================
+# Downloader Runtime Files
+# ==========================================
+
+downloads/
+instagram_debug.html
+
+*.html.tmp
+*.tmp
+*.temp
+
+
+# ==========================================
+# Downloaded Media
+# ==========================================
+
+*.jpg
+*.jpeg
+*.png
+*.webp
+*.gif
+
+*.mp4
+*.mov
+*.webm
+*.m4a
+*.mp3
+
+
+# ==========================================
+# Logs
+# ==========================================
+
+*.log
+
+logs/
+uvicorn.log
+debug.log
+
+
+# ==========================================
+# Cache
+# ==========================================
+
+.cache/
+cache/
+
+tmp/
+temp/
+
+*.cache
+*.bak
+*.swp
+*.swo
+
+
+# ==========================================
+# Playwright
+# ==========================================
+
+playwright-report/
+blob-report/
+test-results/
+playwright/.cache/
+
+
+# ==========================================
+# Testing / Coverage
+# ==========================================
+
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.mypy_cache/
+.ruff_cache/
+
+
+# ==========================================
+# IDE
+# ==========================================
+
+.vscode/
+.idea/
+*.code-workspace
+.history/
+
+
+# ==========================================
+# Jupyter
+# ==========================================
+
+.ipynb_checkpoints/
+
+
+# ==========================================
+# OS
+# ==========================================
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+
+# Linux
+*~
+
+
+# ==========================================
+# Windows Executables
+# ==========================================
+
+*.exe
+*.msi
+
+
+# ==========================================
+# Local / Backup Files
+# ==========================================
+
+*.local
+*.local.*
+
+debug/
+backup/
+backups/
+
+
+# ==========================================
+# Archives
+# ==========================================
+
+*.rar
+*.zip

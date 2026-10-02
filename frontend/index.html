@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>دانلود عکس و ویدیو از اینستاگرام</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#fafafa;color:#161616;font-family:Tahoma,Arial,sans-serif}
+header{height:64px;background:#fff;border-bottom:1px solid #eee}.nav{max-width:1050px;height:100%;margin:auto;padding:0 18px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-weight:800}.links{display:flex;gap:20px;color:#666;font-size:13px}a{text-decoration:none;color:inherit}
+.hero{text-align:center;padding:70px 18px 35px}.hero h1{font-size:36px;margin:0 0 12px}.lead{color:#777;line-height:2}
+.search{max-width:760px;margin:28px auto}.form{display:flex;background:#fff;border:1px solid #ddd;border-radius:14px;padding:5px}
+input{flex:1;min-width:0;border:0;outline:0;padding:16px;direction:ltr;font-size:15px}button{border:0;border-radius:10px;background:#111;color:#fff;padding:0 28px;cursor:pointer;font-size:15px}
+button:disabled{opacity:.55}.msg{min-height:25px;color:#b42318;font-size:13px;padding-top:9px}
+.result{max-width:1000px;margin:0 auto 60px;padding:0 18px}.box{background:#fff;border:1px solid #eee;border-radius:18px;padding:18px}
+.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}.badge{background:#f1f1f1;padding:7px 11px;border-radius:99px;font-size:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:16px}
+.item{border:1px solid #eee;border-radius:13px;padding:9px;background:#fff}.media{width:100%;aspect-ratio:1/1;object-fit:cover;border-radius:9px;background:#f2f2f2;display:block}
+.download{display:block;background:#111;color:#fff;text-align:center;border-radius:9px;padding:10px;margin-top:9px;font-size:13px}
+.note{color:#777;font-size:12px;line-height:1.8;margin-top:15px}
+@media(max-width:650px){.hero{padding-top:45px}.hero h1{font-size:28px}.form{display:block}.form button{width:100%;height:50px;margin-top:5px}.links{display:none}}
+</style>
+</head>
+<body>
+<header><nav class="nav"><a class="logo" href="/">دانلودر اینستاگرام</a><div class="links"><a href="/how-to-download.html">آموزش</a><a href="/faq.html">سوالات متداول</a></div></nav></header>
+<section class="hero">
+<h1>دانلود عکس و ویدیو از اینستاگرام</h1>
+<p class="lead">لینک پست عمومی اینستاگرام را وارد کنید تا تصاویر و ویدیوهای همان پست را ببینید و هرکدام را جداگانه دانلود کنید.</p>
+<div class="search">
+<div class="form"><input id="url" placeholder="https://www.instagram.com/p/..." autocomplete="off"><button id="go">نمایش تصاویر</button></div>
+<div id="msg" class="msg"></div>
+</div>
+</section>
+<main id="result" class="result"></main>
+<script>
+const input=document.getElementById('url'),btn=document.getElementById('go'),msg=document.getElementById('msg'),result=document.getElementById('result');
+async function run(){
+ msg.textContent='';result.innerHTML='';
+ const url=input.value.trim();
+ if(!url){msg.textContent='لینک اینستاگرام را وارد کنید.';return}
+ btn.disabled=true;btn.textContent='در حال بررسی...';
+ try{
+  const r=await fetch('/api/gallery',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url})});
+  const data=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(data.detail||'دریافت پست انجام نشد.');
+  const items=data.items||[];
+  if(!items.length)throw new Error('تصویری برای نمایش پیدا نشد.');
+  const box=document.createElement('div');box.className='box';
+  const head=document.createElement('div');head.className='head';
+  head.innerHTML='<strong>تصاویر و ویدیوهای پست</strong><span class="badge">'+items.length+' فایل</span>';
+  box.appendChild(head);
+  const grid=document.createElement('div');grid.className='grid';
+  items.forEach((item,i)=>{
+   const card=document.createElement('div');card.className='item';
+   let media;
+   if(item.type==='video'){media=document.createElement('video');media.controls=true;media.preload='metadata'}
+   else {media=document.createElement('img');media.loading='lazy';media.alt='تصویر پست '+(i+1)}
+   media.className='media';media.src=item.url;card.appendChild(media);
+   const a=document.createElement('a');a.className='download';a.href=item.url;a.download=item.filename;a.textContent=item.type==='video'?'دانلود ویدیو':'دانلود تصویر';
+   card.appendChild(a);grid.appendChild(card);
+  });
+  box.appendChild(grid);
+  const note=document.createElement('div');note.className='note';note.textContent='هر فایل را می‌توانید جداگانه دانلود کنید.';
+  box.appendChild(note);result.appendChild(box);
+ }catch(e){msg.textContent=e.message||'خطا در دریافت پست.'}
+ finally{btn.disabled=false;btn.textContent='نمایش تصاویر'}
+}
+btn.onclick=run;input.addEventListener('keydown',e=>{if(e.key==='Enter')run()});
+</script>
+</body>
+</html>
